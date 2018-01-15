@@ -1,0 +1,4 @@
+!.gitkeep
+/openhab/userdata/logs/*
+/homegear/log/*
+/mysql/data/*

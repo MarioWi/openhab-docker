@@ -1,0 +1,83 @@
+version: '2'
+
+services:
+  openhab:
+    image: "openhab/openhab:2.2.0-amd64-debian"
+    restart: always
+    expose:
+      - "8080"          # http UI
+      - "8443"          # https UI
+      - "9123"          # Port for Callback-Server
+      - "9125"          # XML-RPC Callback
+      - "9126"          # BIN-RPC Callback
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+      - "9123:9123"
+      - "9125:9125"
+      - "9126:9126"
+    tty: true
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+      - ./openhab/addons:/openhab/addons
+      - ./openhab/conf:/openhab/conf
+      - ./openhab/userdata:/openhab/userdata
+    environment:
+      OPENHAB_HTTP_PORT: "8080"
+      OPENHAB_HTTPS_PORT: "8443"
+    depends_on:
+      - homegear
+      - mysql
+    networks:
+      - openhab-network
+
+  homegear:
+    restart: always
+    privileged: true
+    expose:
+      - "2000"          # HS485 daemon - wired
+      - "2001"          # RF deamon
+      - "2002"          #
+      - "2003"          # 
+    ports:
+      - "2000:2000"
+      - "2001:2001"
+      - "2002:2002"
+      - "2003:2003"  
+    build: homegear
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+      - ./homegear/config:/etc/homegear
+      - ./homegear/lib:/var/lib/homegear
+      - ./homegear/log:/var/log/homegear
+#      - /boot:/boot
+    networks:
+      - openhab-network  
+
+  mysql:
+      restart: always
+      expose:
+        - "3306"
+        - "33060"
+      ports:
+        - "3306:3306"
+        - "33060:33060"
+      image: mysql/mysql-server:5.7
+      volumes:
+        - ./mysql/init.sql:/docker-entrypoint-initdb.d/openhab-init.sql
+        - ./mysql/data:/var/lib/mysql
+      environment:
+        - MYSQL_RANDOM_ROOT_PASSWORD=yes
+        - MYSQL_DATABASE=OpenHAB
+        - MYSQL_USER=openhabuser
+        - MYSQL_PASSWORD=abcD1234!
+      networks:
+        - openhab-network
+
+networks:
+  openhab-network:
+    driver: bridge

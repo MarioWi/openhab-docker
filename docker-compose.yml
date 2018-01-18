@@ -66,24 +66,40 @@ services:
       - openhab-network  
 
   mysql:
-      restart: always
-      expose:
-        - "3306"
-        - "33060"
-      ports:
-        - "3306:3306"
-        - "33060:33060"
-      image: mysql/mysql-server:5.7
-      volumes:
-        - ./mysql/init.sql:/docker-entrypoint-initdb.d/openhab-init.sql
-        - ./mysql/data:/var/lib/mysql
-      environment:
-        - MYSQL_RANDOM_ROOT_PASSWORD=yes
-        - MYSQL_DATABASE=OpenHAB
-        - MYSQL_USER=openhabuser
-        - MYSQL_PASSWORD=abcD1234!
-      networks:
-        - openhab-network
+    restart: always
+    expose:
+      - "3306"
+      - "33060"
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    image: mysql/mysql-server:5.7
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/openhab-init.sql
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=OpenHAB
+      - MYSQL_USER=openhabuser
+      - MYSQL_PASSWORD=abcD1234!
+    networks:
+      - openhab-network
+
+  mqtt:
+    restart: always
+    expose:
+      - "1883"
+      - "9001"
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    image: toke/mosquitto
+    volumes:
+      - ./mqtt/config/:/mqtt/config/
+      - ./mqtt/log/:/mqtt/log/
+      - ./mqtt/data/:/mqtt/data/
+    networks:
+      - openhab-network
 
 networks:
   openhab-network:

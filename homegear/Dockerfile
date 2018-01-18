@@ -109,6 +109,11 @@ RUN chmod +x /usr/local/bin/start.sh
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ############################################################
+# copy basicConf
+############################################################
+COPY ./basicConf/homematicbidcos.conf /etc/homegear/config/families/homematicbidcos.conf
+
+############################################################
 # Folders needed
 ############################################################
 VOLUME /etc/homegear 

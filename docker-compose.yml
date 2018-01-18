@@ -2,21 +2,26 @@ version: '2'
 
 services:
   openhab:
-    image: "openhab/openhab:2.2.0-amd64-debian"
+#    image: "openhab/openhab:2.2.0-amd64-debian"
     restart: always
     expose:
       - "8080"          # http UI
       - "8443"          # https UI
+#      - "8101"          # console ?
+#      - "5007"          # LSP Port ?
       - "9123"          # Port for Callback-Server
       - "9125"          # XML-RPC Callback
       - "9126"          # BIN-RPC Callback
     ports:
       - "8080:8080"
       - "8443:8443"
+#      - "8101:8101"
+#      - "5007:5007"
       - "9123:9123"
       - "9125:9125"
       - "9126:9126"
     tty: true
+    build: openhab
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/etc/timezone:/etc/timezone:ro"

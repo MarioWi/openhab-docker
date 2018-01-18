@@ -1,3 +1,5 @@
+FROM multiarch/debian-debootstrap:amd64-stretch
+
 #FROM openhab/openhab:2.2.0-amd64-debian
 
 # File Author / Maintainer
@@ -10,8 +12,11 @@ MAINTAINER Mario Wicke
 #
 #                       PLEASE DO NOT EDIT IT DIRECTLY.
 # ------------------------------------------------------------------------------
-#
-FROM multiarch/debian-debootstrap:amd64-stretch
+################################################################################
+# but i have changed some things
+# like locales
+# and basicConfig near EOF
+#################################################################################
 
 # Set download urls
 ENV 	    JAVA_URL="https://www.azul.com/downloads/zulu/zdk-8-ga-linux_x64.tar.gz" 	    OPENHAB_URL="https://bintray.com/openhab/mvn/download_file?file_path=org%2Fopenhab%2Fdistro%2Fopenhab%2F2.2.0%2Fopenhab-2.2.0.zip" 	    OPENHAB_VERSION="2.2.0"
@@ -116,8 +121,7 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Copy basicConfig
-COPY entrypoint.sh /
-./basicConf/mysql.cfg ${APPDIR}/conf/services/mysql.cfg
+COPY ./basicConf/mysql.cfg ${APPDIR}/conf/services/mysql.cfg
 
 # Execute command
 CMD ["gosu", "openhab", "./start.sh"]

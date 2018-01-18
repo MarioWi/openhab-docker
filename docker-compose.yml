@@ -21,7 +21,8 @@ services:
       - "9125:9125"
       - "9126:9126"
     tty: true
-    build: openhab
+    build: 
+      context: ./openhab
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/etc/timezone:/etc/timezone:ro"
@@ -50,7 +51,8 @@ services:
       - "2001:2001"
       - "2002:2002"
       - "2003:2003"  
-    build: homegear
+    build: 
+      context: ./homegear
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     volumes:

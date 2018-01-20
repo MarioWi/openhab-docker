@@ -9,16 +9,7 @@ RUN mkdir /data
 WORKDIR /usr/src/node-red
 
 # Add node-red user so we aren't running as root.
-############################################################
-# User anlegen
-############################################################
-RUN groupadd -g 9001 node-red &&\
-    adduser --disabled-password --gecos '' --home /usr/src/node-red --uid 9001 --gid 9001 node-red &&\
-    adduser node-red dialout &&\
-    adduser node-red users &&\
-    adduser node-red sudo &&\
-    adduser node-red node-red \
-#RUN useradd --home-dir /usr/src/node-red --no-create-home node-red \
+RUN useradd --home-dir /usr/src/node-red --no-create-home node-red \
     && chown -R node-red:node-red /data \
     && chown -R node-red:node-red /usr/src/node-red
 
@@ -27,6 +18,9 @@ USER node-red
 # package.json contains Node-RED NPM module and node dependencies
 COPY package.json /usr/src/node-red/
 RUN npm install
+
+# install openhab2
+RUN npm install node-red-contrib-openhab2
 
 # User configuration directory volume
 EXPOSE 1880

@@ -103,6 +103,8 @@ services:
 
   nodered:
     restart: always
+    group_add:
+      - mario
     expose:
       - "1880"
     ports:

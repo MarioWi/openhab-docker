@@ -2,7 +2,6 @@ version: '2'
 
 services:
   openhab:
-#    image: "openhab/openhab:2.2.0-amd64-debian"
     restart: always
     expose:
       - "8080"          # http UI
@@ -61,7 +60,6 @@ services:
       - ./homegear/config:/etc/homegear
       - ./homegear/lib:/var/lib/homegear
       - ./homegear/log:/var/log/homegear
-#      - /boot:/boot
     networks:
       - openhab-network  
 
@@ -103,8 +101,7 @@ services:
 
   nodered:
     restart: always
-    group_add:
-      - mario
+    user: root
     expose:
       - "1880"
     ports:
